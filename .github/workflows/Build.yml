@@ -1,0 +1,42 @@
+name: Build
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+jobs:
+  SonarCloud:
+    name: SonarCloud
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  # SoftwareVersions:
+  #   if: ${{always()}}
+  #   needs: [SonarCloud]
+  #   name: SoftwareVersions
+  #   runs-on: self-hosted
+  #   steps:
+  #     # Apache Ant
+  #      - name: 'Apach Ant'
+  #        run: ant -version
+  #     # Version Control - Git
+  #      - name: 'Git'
+  #        run: git --version
+  #     # Salesforce CLI
+  #      - name: 'Salesforce CLI'
+  #        run: sf version
+  #     # Zulu OpenJDK - Java
+  #      - name: 'Zulu OpenJDK - Java'
+  #        run: java --version
+  #     # PMD
+  #      - name: 'Apex PMD'
+  #        run: pmd --version

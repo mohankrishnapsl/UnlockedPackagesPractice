@@ -1,0 +1,21 @@
+name: Manual Saleforce CLI Update
+
+on:
+# Allows you to run this workflow manually from the Actions tab
+  #run_workflow button is enabled
+ workflow_dispatch:
+
+jobs:
+  Manual_SF_CLI_Update:
+    name: Manual Saleforce CLI Update
+    runs-on: self-hosted
+    steps:
+      # sfdx before update
+       - name: 'Version Before Update'
+         run:   sf version
+      # sfdx update
+       - name: 'Update'
+         run:   sf update
+       # sfdx after update
+       - name: 'Version After Update'
+         run:   sf version

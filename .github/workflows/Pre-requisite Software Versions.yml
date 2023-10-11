@@ -1,0 +1,25 @@
+name: Pre-requisite Software Versions
+on:
+# Allows you to run this workflow manually from the Actions tab
+  #run_workflow button is enabled
+ workflow_dispatch:
+jobs:
+  PreRequisite_Software_Versions:
+    name: Pre Requisite Software Versions
+    runs-on: self-hosted
+    steps:
+      # Apache Ant
+       - name: 'Apach Ant'
+         run: ant -version
+      # Version Control - Git
+       - name: 'Git'
+         run: git --version
+      # Salesforce CLI
+       - name: 'Salesforce CLI'
+         run: sf version
+      # Zulu OpenJDK - Java
+       - name: 'Zulu OpenJDK - Java'
+         run: java --version
+      # PMD
+       - name: 'Apex PMD'
+         run: pmd --version

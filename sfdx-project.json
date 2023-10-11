@@ -1,0 +1,18 @@
+{
+  "packageDirectories": [
+    {
+      "path": "force-app",
+      "default": true,
+      "package": "HelloWorld",
+      "versionName": "ver 1.0",
+      "versionNumber": "1.0.3.NEXT",
+      "versionDescription": "This is a sample HelloWorld Unlocked Package"
+    }
+  ],
+  "namespace": "",
+  "sfdcLoginUrl": "https://login.salesforce.com",
+  "sourceApiVersion": "58.0",
+  "packageAliases": {
+    "HelloWorld": "0Ho5g000000Cay2CAC"
+  }
+}
