@@ -5,13 +5,13 @@
 	<property name="property.file.path" value="CISupport/Sandbox/Sandbox_default.properties"/>
 	<property file="CISupport/Sandbox/Sandbox_default.properties"/>
 
-	<taskdef resource="com/salesforce/antlib.xml" uri="antlib:com.salesforce">
+	<!-- <taskdef resource="com/salesforce/antlib.xml" uri="antlib:com.salesforce">
 		<classpath>
 			<pathelement location="CISupport/lib/ant-salesforce.jar" />
 		</classpath>
 	</taskdef>
 	<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="CISupport/lib/ant-contrib-1.0b3.jar"/>
-	<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${ant.contrib.jar}" />
+	<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${ant.contrib.jar}" /> -->
 
    <target name="startCICD">
 		<sequential>
@@ -58,6 +58,6 @@
 				</else>
 			</if>
 		</sequential>
-    </macrodef>
+   </macrodef>
 
 </project>
