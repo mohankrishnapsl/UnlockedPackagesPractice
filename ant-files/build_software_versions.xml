@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="metadata" basedir="." xmlns:sf="antlib:com.salesforce" default="checkSoftwareVersions">
+
+   <property environment="env"/>
+	<property file="CISupport/Sandbox/taskExecution.properties"/>
+	<property name="property.file.path" value="CISupport/Sandbox/Sandbox_default.properties"/>
+	<property file="CISupport/Sandbox/Sandbox_default.properties"/>
+
+   <target name="checkSoftwareVersions">
+		<sequential>
+			<echo message="Check All Software Version on this Machine"/>
+			<echo message="-------------------------------------------"/>
+
+			
+					<exec executable="cmd" errorproperty="error" resultproperty="result" outputproperty="output" failonerror="true">
+						<arg line='/c ant -version &amp;'/>
+						<arg line='git --version &amp;'/>
+						<arg line='sf --version &amp;'/>
+						<arg line='java --version &amp;'/>
+						<arg line='pmd --version'/>
+					</exec>
+					
+				
+					<echo message="Error property value : ${error}"/>
+					<echo message="Result property value : ${result}"/>
+					<echo message="Output property value :${line.separator}${output}"/>
+
+		</sequential>
+	</target>
+</project>
