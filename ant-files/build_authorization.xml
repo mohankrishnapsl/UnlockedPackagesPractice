@@ -22,7 +22,6 @@
 
    <!-- runJWTAuth macrodef-->
    <macrodef name="runJWTAuth" description="Authorizes a Salesforce org using the JWT flow">
-		<sequential>
 			<!-- <trycatch>
 				<try> -->
 					<!--JWTAuth.bat -->
@@ -43,7 +42,7 @@
 					<echo>Authorization Result Property : ${SFDX.auth.result}</echo>
 					<echo>Authorization Output Property : ${line.separator} ${SFDX.auth.output}</echo>
 				</catch> -->
-		   </trycatch>
+		   <!-- </trycatch> -->
 
 			<echo>Authorization Result Property : ${SFDX.auth.result}</echo>
 			<echo>Authorization Output Property : ${line.separator} ${SFDX.auth.output}</echo>
@@ -57,7 +56,6 @@
 					<echo>Authorization status : FAILURE</echo>
 				</else>
 			</if>
-		</sequential>
    </macrodef>
 
 </project>
