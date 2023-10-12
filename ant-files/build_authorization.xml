@@ -23,8 +23,8 @@
    <!-- runJWTAuth macrodef-->
    <macrodef name="runJWTAuth" description="Authorizes a Salesforce org using the JWT flow">
 		<sequential>
-			<trycatch>
-				<try>
+			<!-- <trycatch>
+				<try> -->
 					<!--JWTAuth.bat -->
                <exec executable="JWTAuth.bat" errorproperty="SFDX.auth.error" outputproperty="SFDX.auth.output" resultproperty="SFDX.auth.result" failonerror="true"/>
 					<!-- <exec executable="cmd" errorproperty="SFDX.auth.error" outputproperty="SFDX.auth.output" resultproperty="SFDX.auth.result" failonerror="true">
@@ -37,12 +37,12 @@
 						<arg line="  - -loglevel error"/>
 						<arg line=" -r ${sfsb.instanceurl}"/>
 					</exec> -->
-				</try>
+				<!-- </try>
 				<catch>
                <echo>Authorization Error Property : ${SFDX.auth.error}</echo>
 					<echo>Authorization Result Property : ${SFDX.auth.result}</echo>
 					<echo>Authorization Output Property : ${line.separator} ${SFDX.auth.output}</echo>
-				</catch>
+				</catch> -->
 		   </trycatch>
 
 			<echo>Authorization Result Property : ${SFDX.auth.result}</echo>
