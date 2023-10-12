@@ -25,17 +25,17 @@
 			<!-- <trycatch>
 				<try> -->
 					<!--JWTAuth.bat -->
-               <exec executable="JWTAuth.bat" errorproperty="SFDX.auth.error" outputproperty="SFDX.auth.output" resultproperty="SFDX.auth.result" failonerror="true"/>
-					<!-- <exec executable="cmd" errorproperty="SFDX.auth.error" outputproperty="SFDX.auth.output" resultproperty="SFDX.auth.result" failonerror="true">
+               <!--<exec executable="JWTAuth.bat" errorproperty="SFDX.auth.error" outputproperty="SFDX.auth.output" resultproperty="SFDX.auth.result" failonerror="true"/>-->
+					<exec executable="cmd" errorproperty="SFDX.auth.error" outputproperty="SFDX.auth.output" resultproperty="SFDX.auth.result" failonerror="true">
 						<arg line="/c " />
 						<arg line="sf org login jwt"/>
 						<arg line=" -o ${sfsb.username}"/>
 						<arg line=" -f ${jwtKeyFile}"/>
 						<arg line=" -i ${clientId}"/>
-						<arg line="  - -json"/>
-						<arg line="  - -loglevel error"/>
+						<arg line="  --json"/>
+						<arg line="  --loglevel error"/>
 						<arg line=" -r ${sfsb.instanceurl}"/>
-					</exec> -->
+					</exec>
 				<!-- </try>
 				<catch>
                <echo>Authorization Error Property : ${SFDX.auth.error}</echo>
