@@ -25,7 +25,7 @@
 		<sequential>
 			<trycatch>
 				<try>
-					<!--JWTAuth.bat-->
+					<!--JWTAuth.bat -->
                <exec executable="JWTAuth.bat" errorproperty="SFDX.auth.error" outputproperty="SFDX.auth.output" resultproperty="SFDX.auth.result" failonerror="true"/>
 					<!-- <exec executable="cmd" errorproperty="SFDX.auth.error" outputproperty="SFDX.auth.output" resultproperty="SFDX.auth.result" failonerror="true">
 						<arg line="/c " />
