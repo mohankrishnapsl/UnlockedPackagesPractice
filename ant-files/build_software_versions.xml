@@ -6,6 +6,18 @@
 	<property name="property.file.path" value="CISupport/Sandbox/Sandbox_default.properties"/>
 	<property file="CISupport/Sandbox/Sandbox_default.properties"/>
 
+	<target name="start">
+		<sequential>
+			<!--call macrodef - checkSoftwareVersions-->
+			<checkSoftwareVersions/>
+
+			<!--call the target : startCICD in the build file : build_authorization.xml-->
+			<ant antfile="build_authorization.xml" target="startCICD" useNativeBasedir="true">
+				<property file="${property.file.path}"/>		
+			</ant>	
+		</sequential>
+	</target>
+
 	<!-- checkSoftwareVersions macrodef-->
 	<macrodef name="checkSoftwareVersions" description="Check all software versions that are required for devops cicd process">
 		<sequential>
@@ -24,16 +36,4 @@
 		</sequential>
     </macrodef>
 
-
-   <target name="start">
-		<sequential>
-			<!--call macrodef - checkSoftwareVersions-->
-			<checkSoftwareVersions/>
-
-			<!--call the target : startCICD in the build file : build_authorization.xml-->
-			<ant antfile="build_authorization.xml" target="startCICD" useNativeBasedir="true">
-				<property file="${property.file.path}"/>		
-			</ant>	
-		</sequential>
-	</target>
 </project>
