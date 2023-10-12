@@ -31,7 +31,7 @@
 			<checkSoftwareVersions/>
 
 			<!--call the target : startCICD in the build file : build_authorization.xml-->
-			<ant antfile="ant-files/build_authorization.xml" target="startCICD" useNativeBasedir="true">
+			<ant antfile="build_authorization.xml" target="startCICD" useNativeBasedir="true">
 				<property file="${property.file.path}"/>		
 			</ant>	
 		</sequential>
