@@ -1,4 +1,4 @@
-//performs addition of two numbers and three numbers Date : 13 Oct 2023 | 11:21 AM| Mohan Krishna S
+//performs addition of two numbers and three numbers Date : 13 Oct 2023 | 1:00 PM | Mohan Krishna S
 public with sharing class Addition {
     //sum of two numbers  
     public static Integer sumOf2(Integer a, Integer b){
