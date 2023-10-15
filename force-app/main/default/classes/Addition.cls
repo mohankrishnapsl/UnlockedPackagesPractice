@@ -13,7 +13,7 @@ public with sharing class Addition {
         return a+b+c+d;
     } 
     //sum of five numbers  
-    public static Integer sumOf5(Integer a, Integer b, Integer c, Integer d, Integer e, Integer f){
+    public static Integer sumOf5(Integer a, Integer b, Integer c, Integer d, Integer e){
         return a+b+c+d+e;
     }
 }

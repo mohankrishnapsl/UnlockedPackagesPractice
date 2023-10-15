@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>  
-<project name="metadata" basedir="." xmlns:sf="antlib:com.salesforce">
+<project name="unlockedpackage" basedir="." xmlns:sf="antlib:com.salesforce">
 
    <property environment="env"/>
 	<property name="property.file.path" value="CISupport/Sandbox/Sandbox_default.properties"/>
@@ -13,10 +13,11 @@
 	<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="CISupport/lib/ant-contrib-1.0b3.jar"/>
 	<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${ant.contrib.jar}" />
 
-   <target name="startCICD">
+   <target name="UnlockedPackage">
 		<sequential>
          <!--call macrodef - runJWTAuth-->
          <runJWTAuth/>
+			<createUnlockedPackage/>
       </sequential>
 	</target>
 
@@ -55,6 +56,64 @@
 				</then>
 				<else>
 					<echo>Authorization status : FAILURE</echo>
+				</else>
+			</if>
+		</sequential>
+   </macrodef>
+
+	<macrodef name="createUnlockedPackage" description="Creates a new unlocked package">
+		<sequential>
+			<trycatch>
+				<try>
+					<exec executable="cmd" errorproperty="up_error" outputproperty="up_output" resultproperty="up_result" failonerror="true">
+						<arg line="/c " />
+						<arg line='sf package create -n ${packageName} -t Unlocked -d "${packageDescription}" -v ${sfsb.username} -r ${packageMetadataPath}'/>
+					</exec>
+				</try>
+				<catch>
+               <echo>
+							Unlocked Package : *****************************`
+							Error Property : ${up_error} ${line.separator}
+							Result Property : ${up_result} ${line.separator}
+							Output Property : ${up_output}
+					</echo>
+				</catch>
+		   </trycatch>
+
+			<echo>
+					Unlocked Package : ******************************
+					Result Property : ${up_result} ${line.separator}
+					Output Property : ${up_output}
+			</echo>
+      
+			<if>
+				<equals arg1="${up_result}" arg2="0"/>
+				<then>
+					<echo>Create Unlocked Package status : SUCCESS</echo>
+					<trycatch>
+						<try>
+							<exec executable="cmd" errorproperty="pl_error" outputproperty="pl_output" resultproperty="pl_result" failonerror="true">
+								<arg line="/c " />
+								<arg line='sf package list -v ${sfsb.username}'/>
+							</exec>
+						</try>
+						<catch>
+							<echo>
+									Unlocked Package List : ******************************
+									Error Property : ${pl_error} ${line.separator}
+									Result Property : ${pl_result} ${line.separator}
+									Output Property : ${pl_output}
+							</echo>
+						</catch>
+					</trycatch>
+					<echo>
+							Unlocked Package List : ******************************
+							Result Property : ${pl_result} ${line.separator}
+							Output Property : ${pl_output}
+					</echo>
+				</then>
+				<else>
+					<echo>Create Unlocked Package status : FAILURE</echo>
 				</else>
 			</if>
 		</sequential>
