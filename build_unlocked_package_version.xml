@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<project name="unlockedpackage" basedir="." xmlns:sf="antlib:com.salesforce">
+
+   <property environment="env"/>
+	<property name="property.file.path" value="CISupport/Sandbox/Sandbox_default.properties"/>
+	<property file="CISupport/Sandbox/Sandbox_default.properties"/>
+
+	<taskdef resource="com/salesforce/antlib.xml" uri="antlib:com.salesforce">
+		<classpath>
+			<pathelement location="CISupport/lib/ant-salesforce.jar" />
+		</classpath>
+	</taskdef>
+	<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="CISupport/lib/ant-contrib-1.0b3.jar"/>
+	<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${ant.contrib.jar}" />
+
+   <target name="UnlockedPackage">
+		<sequential>
+         <!-- <runJWTAuth/> -->
+			<createUnlockedPackageVersion/>
+      </sequential>
+	</target>
+
+   <!-- runJWTAuth macrodef-->
+   <macrodef name="runJWTAuth" description="Authorizes a Salesforce org using the JWT flow">
+		<sequential>
+			<trycatch>
+				<try>
+					<!--JWTAuth.bat -->
+         		<!-- <exec executable='JWTAuth.bat' errorproperty="SFDX.auth.error" outputproperty="SFDX.auth.output" resultproperty="SFDX.auth.result" failonerror="true"/> -->
+					<exec executable="cmd" errorproperty="SFDX.auth.error" outputproperty="SFDX.auth.output" resultproperty="SFDX.auth.result" failonerror="true">
+						<arg line="/c " />
+						<arg line="sf org login jwt"/>
+						<arg line=" -o ${sfsb.username}"/>
+						<arg line=" -f ${jwtKeyFile}"/>
+						<arg line=" -i ${clientId}"/>
+						<arg line="  --json"/>
+						<arg line="  --loglevel error"/>
+						<arg line=" -r ${sfsb.instanceurl}"/>
+					</exec>
+				</try>
+				<catch>
+               <echo>==========================Authorization Error Property : ${SFDX.auth.error}</echo>
+					<!-- <echo>Authorization Result Property : ${SFDX.auth.result}</echo>
+					<echo>Authorization Output Property : ${line.separator} ${SFDX.auth.output}</echo> -->
+				</catch>
+		   </trycatch>
+
+			<echo>==========================Authorization Result Property : ${SFDX.auth.result}</echo>
+			<echo>Authorization Output Property : ${line.separator} ${SFDX.auth.output}</echo>
+      
+			<if>
+				<equals arg1="${SFDX.auth.result}" arg2="0"/>
+				<then>
+					<echo>Authorization status : SUCCESS</echo>
+				</then>
+				<else>
+					<echo>Authorization status : FAILURE</echo>
+				</else>
+			</if>
+		</sequential>
+   </macrodef>
+
+	<macrodef name="createUnlockedPackageVersion" description="Creates a new unlocked package version">
+		<sequential>
+			<trycatch>
+				<try>
+					<exec executable="cmd" errorproperty="upv_error" outputproperty="upv_output" resultproperty="upv_result" failonerror="true">
+						<arg line="/c " />
+						<arg line="sf package version create -p ${packageName} -k ${packageVersionInstallationKey} -v ${sfsb.username} -d ${packageMetadataPath} -c"/>
+					</exec>
+				</try>
+				<catch>
+               <echo>
+							==========================Unlocked Package Version: ${line.separator} 
+							Error Property : ${upv_error} ${line.separator}
+							<!-- Result Property : ${upv_output} ${line.separator}
+							Output Property : ${upv_result} -->
+					</echo>
+				</catch>
+		   </trycatch>
+
+			<echo>
+					==========================Unlocked Package Version: ${line.separator}
+					Result Property : ${upv_output} ${line.separator}
+				   Output Property : ${upv_result}
+			</echo>
+      
+			<if>
+				<equals arg1="${upv_result}" arg2="0"/>
+				<then>
+					<echo>==========================Create Unlocked Package Version status : SUCCESS</echo>
+				</then>
+				<else>
+					<echo>==========================Create Unlocked Package Version status : FAILURE</echo>
+				</else>
+			</if>
+
+			<fetchVersionCreationReport contents="${upv_output}" command="reportStatusCommand"/>
+
+			<echo>
+					==========================Unlocked Package Version report command : ${line.separator}
+					Report command : ${reportStatusCommand}
+			</echo>
+
+			<sleep seconds="100"/> <!-- need to write a logic until the install url is displayed in the report-->
+
+			<exec executable="cmd" errorproperty="upvr_error" outputproperty="upvr_output" resultproperty="upvr_result" failonerror="true">
+				<arg line="/c " />
+				<arg line="${reportStatusCommand} -v ${sfsb.username}"/>
+			</exec>
+			
+			<property name="subPackageID" value=""/>
+
+			<fetchVersionInstallationUrl contents="${upvr_output}" packageversionid="id" installationurl="url" status="status"/>
+
+<!-- 
+			<echo>
+					==========================Unlocked Package Version Report details : ${line.separator}
+					Status 								= ${status} ${line.separator}
+					Subscriber package version id = ${id} ${line.separator}
+					Installation url              = ${url}
+			</echo> -->
+
+			<echo>
+					==========================Unlocked Package Version Report details : ${line.separator}
+					Output : ${upvr_output} ${line.separator}
+					Status 								= ${status} ${line.separator}
+					Subscriber package version id = ${id} ${line.separator}
+			</echo>
+
+			<installUnlockedPackageVersion/>
+			
+			<promoteUnlockedPackageVersion/>
+
+		</sequential>
+   </macrodef>
+
+	<macrodef name="installUnlockedPackageVersion" description="install unlocked package version">
+		<sequential>
+			<exec executable="cmd" errorproperty="upvi_error" outputproperty="upvi_output" resultproperty="upvi_result" failonerror="true">
+				<arg line="/c " />
+				<arg line="sf package install -p ${id} -k ${packageInstallationKey} -o ${sfsb.username}"/>
+			</exec>
+
+			<echo>
+					==========================Unlocked Package Version Installation details : ${line.separator}
+					Error Property : ${upvi_error} ${line.separator}
+					Result Property : ${upvi_result} ${line.separator}
+				   Output Property : ${upvi_output}
+			</echo>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="promoteUnlockedPackageVersion" description="promote unlocked package version">
+		<sequential>
+			<exec executable="cmd" errorproperty="upvp_error" outputproperty="upvp_output" resultproperty="upvp_result" failonerror="true">
+				<arg line="/c " />
+				<arg line="sf package version promote -p ${id} -v ${sfsb.username}"/>
+			</exec>
+
+			<echo>
+					==========================Unlocked Package Version Promote details : ${line.separator}
+					Error Property : ${upvp_error} ${line.separator}
+					Result Property : ${upvp_result} ${line.separator}
+				   Output Property : ${upvp_output}
+			</echo>
+		</sequential>
+	</macrodef>
+
+	<scriptdef name="fetchVersionCreationReport" language="javascript" description="fetch version creation report command">
+		<attribute name="contents"/>
+		<attribute name="command"/>
+		<![CDATA[
+			var fetchCommand = attributes.get("contents");
+			fetchCommand = fetchCommand.substring( fetchCommand.indexOf('"s')+1 , fetchCommand.indexOf('" to') );
+			project.setProperty(attributes.get("command"), fetchCommand);
+		]]>
+	</scriptdef>
+
+	<scriptdef name="fetchVersionInstallationUrl" language="javascript" description="fetch version creation report installation url">
+		<attribute name="contents"/>		
+		<attribute name="status"/>
+		<attribute name="packageversionid"/>
+		<attribute name="installationurl"/>
+		<![CDATA[
+			var fetchStatus = attributes.get("contents");
+			var fetchInstallationUrl = "";
+			var fetchPackageVersionId = "";
+			var reportArray = fetchStatus.split("\n");
+			var contents = "";
+			var echo = project.createTask("echo");
+
+			if(fetchStatus.indexOf("Error") > -1){
+				fetchStatus = "Error";
+			}
+			else if(fetchStatus.indexOf("Success") > -1){
+				fetchStatus = "Success";
+				
+
+				for(var i=0; i<reportArray.length; i++){
+					echo.setMessage("---------------"+i+"-------"+reportArray[i]+"-------------\n");
+					echo.perform();
+				}
+				fetchPackageVersionId = reportArray[8];
+				fetchPackageVersionId = fetchPackageVersionId.substring(fetchPackageVersionId.indexOf("d ")+2,fetchPackageVersionId.length);
+				fetchInstallationUrl = reportArray[12];
+				fetchInstallationUrl = fetchInstallationUrl.substring(fetchInstallationUrl.indexOf("htt"),fetchInstallationUrl.length);
+				echo.setMessage("-------------------->>>>>"+fetchPackageVersionId+"\n");
+				echo.perform();
+				echo.setMessage("-------------------->>>>>"+fetchInstallationUrl+"\n");
+				echo.perform();
+			}
+
+			project.setProperty(attributes.get("status"), fetchStatus);
+			project.setProperty(attributes.get("packageversionid"), fetchPackageVersionId);
+			project.setProperty(attributes.get("installationurl"), fetchInstallationUrl);
+		
+		]]>
+	</scriptdef>
+
+</project>

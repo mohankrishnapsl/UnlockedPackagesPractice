@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<project name="unlockedpackage" basedir="." xmlns:sf="antlib:com.salesforce">
+
+   <property environment="env"/>
+	<property name="property.file.path" value="CISupport/Sandbox/Sandbox_default.properties"/>
+	<property file="CISupport/Sandbox/Sandbox_default.properties"/>
+
+	<taskdef resource="com/salesforce/antlib.xml" uri="antlib:com.salesforce">
+		<classpath>
+			<pathelement location="CISupport/lib/ant-salesforce.jar" />
+		</classpath>
+	</taskdef>
+	<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="CISupport/lib/ant-contrib-1.0b3.jar"/>
+	<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${ant.contrib.jar}" />
+
+	<!-- This target will invokved two macrodef 1. runJWTAuth 2. createUnlockedPackage 
+		  1. runJWTAuth - will authorized the org using connected app
+		  2. createUnlockedPackage - will create a package with the details given in sandbox_default.properties	
+	-->
+   <target name="UnlockedPackage">
+		<sequential>
+         <runJWTAuth/>
+			<createUnlockedPackage/>
+			<ant antfile="build_unlocked_package_version.xml" target="UnlockedPackage" useNativeBasedir="true"/>
+      </sequential>
+	</target>
+
+   <!-- runJWTAuth macrodef-->
+   <macrodef name="runJWTAuth" description="Authorizes a Salesforce org using the JWT flow">
+		<sequential>
+			<trycatch>
+				<try>
+					<!--JWTAuth.bat -->
+         		<!-- <exec executable='JWTAuth.bat' errorproperty="SFDX.auth.error" outputproperty="SFDX.auth.output" resultproperty="SFDX.auth.result" failonerror="true"/> -->
+					<exec executable="cmd" errorproperty="SFDX.auth.error" outputproperty="SFDX.auth.output" resultproperty="SFDX.auth.result" failonerror="true">
+						<arg line="/c " />
+						<arg line="sf org login jwt"/>
+						<arg line=" -o ${sfsb.username}"/>
+						<arg line=" -f ${jwtKeyFile}"/>
+						<arg line=" -i ${clientId}"/>
+						<arg line="  --json"/>
+						<arg line="  --loglevel error"/>
+						<arg line=" -r ${sfsb.instanceurl}"/>
+					</exec>
+				</try>
+				<catch>
+               <echo>==========================Authorization Error Property : ${SFDX.auth.error}</echo>
+					<!-- <echo>Authorization Result Property : ${SFDX.auth.result}</echo>
+					<echo>Authorization Output Property : ${line.separator} ${SFDX.auth.output}</echo> -->
+				</catch>
+		   </trycatch>
+
+			<echo>==========================Authorization Result Property : ${SFDX.auth.result}</echo>
+			<echo>Authorization Output Property : ${line.separator} ${SFDX.auth.output}</echo>
+      
+			<if>
+				<equals arg1="${SFDX.auth.result}" arg2="0"/>
+				<then>
+					<echo>Authorization status : SUCCESS</echo>
+				</then>
+				<else>
+					<echo>Authorization status : FAILURE</echo>
+				</else>
+			</if>
+		</sequential>
+   </macrodef>
+
+	<!-- createUnlockedPackage macrodef-->
+	<macrodef name="createUnlockedPackage" description="Creates a new unlocked package">
+		<sequential>
+			<trycatch>
+				<try>
+					<exec executable="cmd" errorproperty="up_error" outputproperty="up_output" resultproperty="up_result" failonerror="true">
+						<arg line="/c " />
+						<arg line='sf package create -n ${packageName} -t Unlocked -d "${packageDescription}" -v ${sfsb.username} -r ${packageMetadataPath}'/>
+					</exec>
+				</try>
+				<catch>
+               <echo>
+							==========================Unlocked Package : 
+							Error Property : ${up_error} ${line.separator}
+							<!-- Result Property : ${up_result} ${line.separator}
+							Output Property : ${up_output} -->
+					</echo>
+				</catch>
+		   </trycatch>
+
+			<echo>
+					==========================Unlocked Package : 
+					Result Property : ${up_result} ${line.separator}
+					Output Property : ${up_output}
+			</echo>
+      
+			<if>
+				<equals arg1="${up_result}" arg2="0"/>
+				<then>
+					<echo>Create Unlocked Package status : SUCCESS</echo>
+					<trycatch>
+						<try>
+							<exec executable="cmd" errorproperty="pl_error" outputproperty="pl_output" resultproperty="pl_result" failonerror="true">
+								<arg line="/c " />
+								<arg line='sf package list -v ${sfsb.username}'/>
+							</exec>
+						</try>
+						<catch>
+							<echo>
+									==========================Unlocked Package List : 
+									Error Property : ${pl_error} ${line.separator}
+									<!-- Result Property : ${pl_result} ${line.separator}
+									Output Property : ${pl_output} -->
+							</echo>
+						</catch>
+					</trycatch>
+					<echo>
+							=======================Unlocked Package List : 
+							Result Property : ${pl_result} ${line.separator}
+							Output Property : ${pl_output}
+					</echo>
+				</then>
+				<else>
+					<echo>====================Create Unlocked Package status : FAILURE</echo>
+				</else>
+			</if>
+		</sequential>
+   </macrodef>
+
+</project>

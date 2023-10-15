@@ -3,16 +3,13 @@
     {
       "path": "force-app",
       "default": true,
-      "package": "HelloWorld",
-      "versionName": "ver 1.0",
-      "versionNumber": "1.0.3.NEXT",
-      "versionDescription": "This is a sample HelloWorld Unlocked Package"
+      "package": "13Oct2023",
+      "versionName": "ver 0.1",
+      "versionNumber": "0.1.0.NEXT",
+      "versionDescription": "13Oct2023 is the first package that is being created through TeamCity DevOps CICD process"
     }
   ],
   "namespace": "",
   "sfdcLoginUrl": "https://login.salesforce.com",
-  "sourceApiVersion": "58.0",
-  "packageAliases": {
-    "HelloWorld": "0Ho5g000000Cay2CAC"
-  }
+  "sourceApiVersion": "59.0"
 }
