@@ -13,11 +13,15 @@
 	<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="CISupport/lib/ant-contrib-1.0b3.jar"/>
 	<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${ant.contrib.jar}" />
 
+	<!-- This target will invokved two macrodef 1. runJWTAuth 2. createUnlockedPackage 
+		  1. runJWTAuth - will authorized the org using connected app
+		  2. createUnlockedPackage - will create a package with the details given in sandbox_default.properties	
+	-->
    <target name="UnlockedPackage">
 		<sequential>
-         <!--call macrodef - runJWTAuth-->
          <runJWTAuth/>
 			<createUnlockedPackage/>
+			<ant antfile="build_unlocked_package_version.xml" target="UnlockedPackage" useNativeBasedir="true"/>
       </sequential>
 	</target>
 
@@ -40,13 +44,13 @@
 					</exec>
 				</try>
 				<catch>
-               <echo>Authorization Error Property : ${SFDX.auth.error}</echo>
-					<echo>Authorization Result Property : ${SFDX.auth.result}</echo>
-					<echo>Authorization Output Property : ${line.separator} ${SFDX.auth.output}</echo>
+               <echo>==========================Authorization Error Property : ${SFDX.auth.error}</echo>
+					<!-- <echo>Authorization Result Property : ${SFDX.auth.result}</echo>
+					<echo>Authorization Output Property : ${line.separator} ${SFDX.auth.output}</echo> -->
 				</catch>
 		   </trycatch>
 
-			<echo>Authorization Result Property : ${SFDX.auth.result}</echo>
+			<echo>==========================Authorization Result Property : ${SFDX.auth.result}</echo>
 			<echo>Authorization Output Property : ${line.separator} ${SFDX.auth.output}</echo>
       
 			<if>
@@ -61,6 +65,7 @@
 		</sequential>
    </macrodef>
 
+	<!-- createUnlockedPackage macrodef-->
 	<macrodef name="createUnlockedPackage" description="Creates a new unlocked package">
 		<sequential>
 			<trycatch>
@@ -72,16 +77,16 @@
 				</try>
 				<catch>
                <echo>
-							Unlocked Package : *****************************`
+							==========================Unlocked Package : 
 							Error Property : ${up_error} ${line.separator}
-							Result Property : ${up_result} ${line.separator}
-							Output Property : ${up_output}
+							<!-- Result Property : ${up_result} ${line.separator}
+							Output Property : ${up_output} -->
 					</echo>
 				</catch>
 		   </trycatch>
 
 			<echo>
-					Unlocked Package : ******************************
+					==========================Unlocked Package : 
 					Result Property : ${up_result} ${line.separator}
 					Output Property : ${up_output}
 			</echo>
@@ -99,21 +104,21 @@
 						</try>
 						<catch>
 							<echo>
-									Unlocked Package List : ******************************
+									==========================Unlocked Package List : 
 									Error Property : ${pl_error} ${line.separator}
-									Result Property : ${pl_result} ${line.separator}
-									Output Property : ${pl_output}
+									<!-- Result Property : ${pl_result} ${line.separator}
+									Output Property : ${pl_output} -->
 							</echo>
 						</catch>
 					</trycatch>
 					<echo>
-							Unlocked Package List : ******************************
+							=======================Unlocked Package List : 
 							Result Property : ${pl_result} ${line.separator}
 							Output Property : ${pl_output}
 					</echo>
 				</then>
 				<else>
-					<echo>Create Unlocked Package status : FAILURE</echo>
+					<echo>====================Create Unlocked Package status : FAILURE</echo>
 				</else>
 			</if>
 		</sequential>
