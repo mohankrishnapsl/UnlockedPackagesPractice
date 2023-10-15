@@ -2,11 +2,7 @@
   "packageDirectories": [
     {
       "path": "force-app",
-      "default": true,
-      "package": "13Oct2023",
-      "versionName": "ver 0.1",
-      "versionNumber": "0.1.0.NEXT",
-      "versionDescription": "13Oct2023 is the first package that is being created through TeamCity DevOps CICD process"
+      "default": true
     }
   ],
   "namespace": "",
