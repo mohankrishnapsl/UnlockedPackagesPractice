@@ -142,7 +142,7 @@
 				   Output Property : ${upvi_output}
 			</echo>
 			
-			<sleep seconds="60"/> 
+			<sleep seconds="100"/> 
 			<!-- <promoteUnlockedPackageVersion/> -->
 
 			<exec executable="cmd" errorproperty="upvp_error" outputproperty="upvp_output" resultproperty="upvp_result" failonerror="true">
