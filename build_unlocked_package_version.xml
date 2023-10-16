@@ -142,7 +142,7 @@
 				   Output Property : ${upvi_output}
 			</echo>
 			
-			<sleep seconds="120"/> 
+			<sleep seconds="130"/> 
 			<!-- <promoteUnlockedPackageVersion/> -->
 
 			<exec executable="cmd" errorproperty="upvp_error" outputproperty="upvp_output" resultproperty="upvp_result" failonerror="true">
@@ -151,7 +151,7 @@
 			</exec>
 
 			<echo>
-					==========================Unlocked Package Version Installation details : ${line.separator}
+					==========================Unlocked Package Version Promote details : ${line.separator}
 					Error Property : ${upvp_error} ${line.separator}
 					Result Property : ${upvp_output} ${line.separator}
 				   Output Property : ${upvp_result}
