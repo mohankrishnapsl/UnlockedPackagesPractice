@@ -132,7 +132,7 @@
 
 			<exec executable="cmd" errorproperty="upvi_error" outputproperty="upvi_output" resultproperty="upvi_result" failonerror="true">
 				<arg line="/c " />
-				<arg line="sf package install -p ${id} -k ${packageInstallationKey} -o ${sfsb.username}"/>
+				<arg line="sf package install -p ${id} -k ${packageVersionInstallationKey} -o ${sfsb.username}"/>
 			</exec>
 
 			<echo>
@@ -142,18 +142,19 @@
 				   Output Property : ${upvi_output}
 			</echo>
 			
+			<sleep seconds="60"/> 
 			<!-- <promoteUnlockedPackageVersion/> -->
 
-			<exec executable="cmd" errorproperty="upvi_error" outputproperty="upvi_output" resultproperty="upvi_result" failonerror="true">
+			<exec executable="cmd" errorproperty="upvp_error" outputproperty="upvp_output" resultproperty="upvp_result" failonerror="true">
 				<arg line="/c " />
-				<arg line="sf package install -p ${id} -k ${packageInstallationKey} -o ${sfsb.username}"/>
+				<arg line="sf package version promote -p ${id} -v ${sfsb.username}"/>
 			</exec>
 
 			<echo>
 					==========================Unlocked Package Version Installation details : ${line.separator}
-					Error Property : ${upvi_error} ${line.separator}
-					Result Property : ${upvi_result} ${line.separator}
-				   Output Property : ${upvi_output}
+					Error Property : ${upvp_error} ${line.separator}
+					Result Property : ${upvp_output} ${line.separator}
+				   Output Property : ${upvp_result}
 			</echo>
 		</sequential>
    </macrodef>
