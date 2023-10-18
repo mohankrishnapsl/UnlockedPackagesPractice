@@ -19,9 +19,9 @@
 	-->
    <target name="UnlockedPackage">
 		<sequential>
-         <runJWTAuth/>
+         <runJWTAuth/> 
 			<createUnlockedPackage/>
-			<ant antfile="build_unlocked_package_version.xml" target="UnlockedPackage" useNativeBasedir="true"/>
+			<!-- <ant antfile="build_unlocked_package_version.xml" target="UnlockedPackage" useNativeBasedir="true"/> -->
       </sequential>
 	</target>
 
@@ -121,6 +121,10 @@
 					<echo>====================Create Unlocked Package status : FAILURE</echo>
 				</else>
 			</if>
+			
+			<loadfile property="message" srcFile="sfdx-project.json"/>
+         <echo>================sfdx-project.json file contents ${line.separator} ${message}</echo>
+
 		</sequential>
    </macrodef>
 

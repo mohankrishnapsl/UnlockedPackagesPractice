@@ -14,7 +14,7 @@
 	<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${ant.contrib.jar}" />
 
    <target name="UnlockedPackage">
-         <for list="1,2,3,4,5,6,7,8,9,10" param="x">
+         <!-- <for list="1,2,3,4,5,6,7,8,9,10" param="x">
             <sequential>
                <echo message="waiting for 5 seconds"/>
                <sleep seconds="5"/>
@@ -26,6 +26,8 @@
                   </then>
                </if>
             </sequential>
-         </for>
+         </for> -->
+         <loadfile property="message" srcFile="sfdx-project.json"/>
+         <echo>${message}</echo>
 	</target>
 </project>
