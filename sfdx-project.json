@@ -1,11 +1,27 @@
 {
-  "packageDirectories": [
+   "packageDirectories": [
      {
-        "path": "force-app",
-        "default": true
+       "path": "force-app",
+       "default": true,
+       "package": "15Oct2023",
+       "versionName": "ver 0.1",
+       "versionNumber": "0.1.0.NEXT",
+       "versionDescription": "This is a new unlocked package"
+     },
+     {
+       "path": "force-app",
+       "package": "18Oct2023",
+       "versionName": "ver 0.1",
+       "versionNumber": "0.1.0.NEXT",
+       "default": false,
+       "versionDescription": "This is a new unlocked package"
      }
-  ],
-  "namespace": "",
-  "sfdcLoginUrl": "https://login.salesforce.com",
-  "sourceApiVersion": "59.0"
-}
+   ],
+   "namespace": "",
+   "sfdcLoginUrl": "https://login.salesforce.com",
+   "sourceApiVersion": "59.0",
+   "packageAliases": {
+     "15Oct2023": "0Ho5g000000wkciCAA",
+     "18Oct2023": "0Ho5g000000wkcnCAA"
+   }
+ }
