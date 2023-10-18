@@ -132,7 +132,7 @@
 
 			<exec executable="cmd" errorproperty="upvi_error" outputproperty="upvi_output" resultproperty="upvi_result" failonerror="true">
 				<arg line="/c " />
-				<arg line="sf package install -p ${id} -k ${packageVersionInstallationKey} -o ${sfsb.username}"/>
+				<arg line="sf package install -p ${id} -k ${packageVersionInstallationKey} -o ${sfsb.username} -r"/>
 			</exec>
 
 			<echo>
@@ -147,11 +147,11 @@
 
 			<exec executable="cmd" errorproperty="upvp_error" outputproperty="upvp_output" resultproperty="upvp_result" failonerror="true">
 				<arg line="/c " />
-				<arg line="sf package version promote -p ${id} -v ${sfsb.username}"/>
+				<arg line="sf package version promote -p ${id} -v ${sfsb.username} -n"/>
 			</exec>
 
 			<echo>
-					==========================Unlocked Package Version Promote details : ${line.separator}
+					==========================Unlocked Package Version Promotion details : ${line.separator}
 					Error Property : ${upvp_error} ${line.separator}
 					Result Property : ${upvp_output} ${line.separator}
 				   Output Property : ${upvp_result}
@@ -159,7 +159,7 @@
 		</sequential>
    </macrodef>
 
-	<macrodef name="installUnlockedPackageVersion" description="install unlocked package version">
+	<!-- <macrodef name="installUnlockedPackageVersion" description="install unlocked package version">
 		<sequential>
 			<exec executable="cmd" errorproperty="upvi_error" outputproperty="upvi_output" resultproperty="upvi_result" failonerror="true">
 				<arg line="/c " />
@@ -173,9 +173,9 @@
 				   Output Property : ${upvi_output}
 			</echo>
 		</sequential>
-	</macrodef>
+	</macrodef> -->
 
-	<macrodef name="promoteUnlockedPackageVersion" description="promote unlocked package version">
+	<!-- <macrodef name="promoteUnlockedPackageVersion" description="promote unlocked package version">
 		<sequential>
 			<exec executable="cmd" errorproperty="upvp_error" outputproperty="upvp_output" resultproperty="upvp_result" failonerror="true">
 				<arg line="/c " />
@@ -189,7 +189,7 @@
 				   Output Property : ${upvp_output}
 			</echo>
 		</sequential>
-	</macrodef>
+	</macrodef> -->
 
 	<scriptdef name="fetchVersionCreationReport" language="javascript" description="fetch version creation report command">
 		<attribute name="contents"/>
