@@ -14,20 +14,38 @@
 	<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${ant.contrib.jar}" />
 
    <target name="UnlockedPackage">
-         <!-- <for list="1,2,3,4,5,6,7,8,9,10" param="x">
-            <sequential>
-               <echo message="waiting for 5 seconds"/>
-               <sleep seconds="5"/>
-               <echo message="done waiting"/>
-               <if>
-                  <equals arg1="success" arg2="${status}"/>
-                  <then>
-                     <fail/>
-                  </then>
-               </if>
-            </sequential>
-         </for> -->
-         <loadfile property="message" srcFile="sfdx-project.json"/>
-         <echo>${message}</echo>
+        
 	</target>
+   <macrodef name="runJWTAuth" description="Authorizes a Salesforce org using the JWT flow">
+		<sequential>
+         <echo>******************* AUTHORIZE THE ORG - START ******************* ${line.separator}</echo>
+			<trycatch>
+				<try>
+					<!--JWTAuth.bat -->
+         		<!-- <exec executable='JWTAuth.bat' errorproperty="SFDX.auth.error" outputproperty="SFDX.auth.output" resultproperty="SFDX.auth.result" failonerror="true"/> -->
+					<exec executable="cmd" errorproperty="SFDX.auth.error" outputproperty="SFDX.auth.output" resultproperty="SFDX.auth.result" failonerror="true">
+						<arg line="/c " />
+						<arg line="sf org login jwt -o ${sfsb.username} -f ${jwtKeyFile} -i ${clientId} -r ${sfsb.instanceurl} --json --loglevel error"/>
+					</exec>
+				</try>
+				<catch>
+               <echo>Error  = ${SFDX.auth.error}</echo>
+				</catch>
+		   </trycatch>
+			<if>
+				<equals arg1="${SFDX.auth.result}" arg2="0"/>
+				<then>
+					<echo>Status = SUCCESS</echo>
+               <echo>Result = ${SFDX.auth.result}</echo>
+               <echo>Output = ${SFDX.auth.output}</echo>
+				</then>
+				<else>
+					<echo>Status = FAILURE</echo>
+               <echo>Result = ${SFDX.auth.result}</echo>
+               <echo>Output = ${SFDX.auth.output}</echo>
+				</else>
+			</if>
+         <echo>******************* AUTHORIZE THE ORG - END ******************* ${line.separator}</echo>
+		</sequential>
+   </macrodef>
 </project>
