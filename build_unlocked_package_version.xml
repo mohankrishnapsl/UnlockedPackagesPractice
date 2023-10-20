@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>  
-<project name="unlockedpackage" basedir="." xmlns:sf="antlib:com.salesforce">
-
+<project name="unlockedpackageversion" basedir="." xmlns:sf="antlib:com.salesforce">
+	<!--  -->
    <property environment="env"/>
 	<property name="property.file.path" value="CISupport/Sandbox/Sandbox_default.properties"/>
 	<property file="CISupport/Sandbox/Sandbox_default.properties"/>
@@ -168,7 +168,7 @@
 
 			<echo>
 					==========================Unlocked Package Version Installation details : ${line.separator}
-					Error Property : ${upvi_error} ${line.separator}
+					Error Property :	 ${upvi_error} ${line.separator}
 					Result Property : ${upvi_result} ${line.separator}
 				   Output Property : ${upvi_output}
 			</echo>
