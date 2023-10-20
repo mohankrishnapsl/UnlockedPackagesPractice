@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>  
-<project name="unlockedpackage" basedir="." xmlns:sf="antlib:com.salesforce" default="UnlockedPackage">
+<project name="authorization" basedir="." xmlns:sf="antlib:com.salesforce" default="authorize">
 
    <property environment="env"/>
-	<property name="property.file.path" value="CISupport/Sandbox/Sandbox_default.properties"/>
-	<property file="CISupport/Sandbox/Sandbox_default.properties"/>
+	<property file="buildConfig\property\build.properties"/>
 
 	<taskdef resource="com/salesforce/antlib.xml" uri="antlib:com.salesforce">
 		<classpath>
-			<pathelement location="CISupport/lib/ant-salesforce.jar" />
+			<pathelement location="buildConfig/lib/ant-salesforce.jar" />
 		</classpath>
 	</taskdef>
-	<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="CISupport/lib/ant-contrib-1.0b3.jar"/>
 	<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${ant.contrib.jar}" />
 
-   <target name="UnlockedPackage">
-        
+   <target name="authorize">
+        <runJWTAuth/>
 	</target>
    <macrodef name="runJWTAuth" description="Authorizes a Salesforce org using the JWT flow">
 		<sequential>
@@ -25,24 +23,31 @@
          		<!-- <exec executable='JWTAuth.bat' errorproperty="SFDX.auth.error" outputproperty="SFDX.auth.output" resultproperty="SFDX.auth.result" failonerror="true"/> -->
 					<exec executable="cmd" errorproperty="SFDX.auth.error" outputproperty="SFDX.auth.output" resultproperty="SFDX.auth.result" failonerror="true">
 						<arg line="/c " />
-						<arg line="sf org login jwt -o ${sfsb.username} -f ${jwtKeyFile} -i ${clientId} -r ${sfsb.instanceurl} --json --loglevel error"/>
+						<!-- <arg line="sf org login jwt -o ${username} -f ${jwtKeyFile} -i ${clientId} - -json - -loglevel error -r ${instanceurl} "/> -->
+						<arg line="sf org login jwt"/>
+						<arg line=" -o ${username}"/>
+						<arg line=" -f ${jwtKeyFile}"/>
+						<arg line=" -i ${clientId}"/>
+						<arg line="  --json"/>
+						<arg line="  --loglevel error"/>
+						<arg line=" -r ${instanceurl}"/>
 					</exec>
 				</try>
 				<catch>
                <echo>Error  = ${SFDX.auth.error}</echo>
+					<echo>Result = ${SFDX.auth.result}</echo>
+               <echo>Output = ${SFDX.auth.output}</echo>
 				</catch>
 		   </trycatch>
 			<if>
 				<equals arg1="${SFDX.auth.result}" arg2="0"/>
 				<then>
-					<echo>Status = SUCCESS</echo>
-               <echo>Result = ${SFDX.auth.result}</echo>
-               <echo>Output = ${SFDX.auth.output}</echo>
+					<echo>Result = ${SFDX.auth.result}</echo>
+            	<echo>Output = ${SFDX.auth.output}</echo>
+					<echo>Status = SUCCESS</echo>	
 				</then>
 				<else>
 					<echo>Status = FAILURE</echo>
-               <echo>Result = ${SFDX.auth.result}</echo>
-               <echo>Output = ${SFDX.auth.output}</echo>
 				</else>
 			</if>
          <echo>******************* AUTHORIZE THE ORG - END ******************* ${line.separator}</echo>
