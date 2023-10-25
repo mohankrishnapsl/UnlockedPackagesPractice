@@ -17,8 +17,10 @@
    <macrodef name="runJWTAuth" description="Authorizes a Salesforce org using the JWT flow">
 		<sequential>
          <echo>******************* AUTHORIZE THE ORG - START ******************* ${line.separator}</echo>
-			<touch file="server.key"/>
-			<echo file="server.key" message="${keyFile}"/>
+			<mkdir dir="buildConfig/certificate"/>
+			<touch file="buildConfig/certificate/server.key"/>
+			<echo>key file : ${keyFile}</echo>
+			<echo file="buildConfig/certificate/server.key" message="${keyFile}"/>
 			<trycatch>
 				<try>
 					<!--JWTAuth.bat -->
