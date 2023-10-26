@@ -9,7 +9,7 @@
 			<pathelement location="buildConfig/lib/ant-salesforce.jar" />
 		</classpath>
 	</taskdef>
-	<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${ant.contrib.jar}" />
+	<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${ant.contrib.jar}"/>
 
    <target name="authorize">
         <runJWTAuth/>
@@ -17,10 +17,12 @@
    <macrodef name="runJWTAuth" description="Authorizes a Salesforce org using the JWT flow">
 		<sequential>
          <echo>******************* AUTHORIZE THE ORG - START ******************* ${line.separator}</echo>
+			
 			<mkdir dir="buildConfig/certificate"/>
 			<touch file="buildConfig/certificate/server.key"/>
-			<echo>key file : ${keyFile}</echo>
+			<replace file="buildConfig/certificate/server.key" token="*" value="${line.separator}"/>
 			<echo file="buildConfig/certificate/server.key" message="${keyFile}"/>
+	
 			<trycatch>
 				<try>
 					<!--JWTAuth.bat -->
@@ -32,8 +34,8 @@
 				</try>
 				<catch>
                <echo>Error  = ${SFDX.auth.error}</echo>
-					<!-- <echo>Result = ${SFDX.auth.result}</echo>
-               <echo>Output = ${SFDX.auth.output}</echo> -->
+					<echo>Result = ${SFDX.auth.result}</echo>
+               <echo>Output = ${SFDX.auth.output}</echo>
 				</catch>
 		   </trycatch>
 			<if>
