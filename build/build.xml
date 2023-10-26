@@ -22,7 +22,7 @@
 			<touch file="buildConfig/certificate/server.key"/>
 			<echo file="buildConfig/certificate/server.key" message="${privateKey}"/>
 			<replace file="buildConfig/certificate/server.key" token="*" value=" "/>
-			<replace file="buildConfig/certificate/server.key" token="**" value="${line.separator}"/>
+			<replace file="buildConfig/certificate/server.key" token="%" value="${line.separator}"/>
 	
 			<trycatch>
 				<try>
