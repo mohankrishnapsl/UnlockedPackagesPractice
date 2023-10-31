@@ -5,7 +5,7 @@
 #   pull_request:
 #     branches: [main]
 #     types: [opened, synchronize, reopened]
-#   workflow_dispatch:
+#   workflow_dispatch: 
 # jobs:
 #   SonarCloud:
 #     name: SonarCloud
